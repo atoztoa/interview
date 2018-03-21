@@ -39,3 +39,24 @@ Next x line(s) represents all children of a current line.  Once all children are
 3, 1, 11 - id 3, parent id 1, has one fruit that weighs 11, represents the second branch that is attached to branch with id 1.
 
 output: your output should be a sum of all fruits.
+
+
+// ------------------- Abheesh Suresh Babu : Comments ------------------ //
+
+The question has ambiguities.
+
+1. Should the robot actually crawl the tree because the output is just the final weight of all fruits?
+2. Can the input have any lines not representing a branch in the tree? Because if it is a tree, then the robot can reach all branches without jumping, flying or dropping.
+3. What is the expected result for the 'input.txt' file? Is it 4? Problem statement is not complete without that.
+
+4. If the output is just the weight of all fruits, then the following code will do.
+
+result = fileText.split('\n').map((item) => (
+  item.split(',').map(x => parseInt(x.trim())).slice(2).reduce((a, b) => a + b, 0)
+)).reduce((a, b) => a + b, 0);
+
+But here the tree is not traversed, just the fruits are 'picked' from the input.
+
+5. Is the code supposed to do a tree traversal, for the problem to be considered solved?
+
+Thanks
