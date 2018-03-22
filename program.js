@@ -36,19 +36,31 @@ class Tree {
    * Traverse the tree and call the callback on each branch
    */
   traverse(callback) {
-    const branchStack = [this.root];
-    let current = null;
+    const visitedBranches = {};
+    const crawlPath = [];
 
-    while (branchStack.length !== 0) {
-      current = branchStack.pop();
+    crawlPath.push(this.root);
 
-      if (callback) {
-        callback(current);
+    while (crawlPath.length > 0) {
+      const current = crawlPath.slice(-1)[0];
+
+      console.log(`Robot at branch ${current.id}`);
+
+      // Let's find next unexplored branch
+      const next = current.children.find(branch => !(branch.id in visitedBranches));
+
+      if (next) {
+        // Let's look at this next
+        crawlPath.push(next);
+      } else {
+        // No children to be visited, let's process this branch
+        if (callback) {
+          callback(current);
+          visitedBranches[current.id] = true;
+        }
+
+        crawlPath.pop();
       }
-
-      current.children.forEach((branch) => {
-        branchStack.push(branch);
-      });
     }
   }
 }
@@ -101,6 +113,8 @@ const parseTree = (fileText) => {
   // Traverse the tree and get weight of each fruit
   tree.traverse((branch) => {
     totalWeight += branch.getValue();
+
+    console.log(`Robot weighed fruit at branch ${branch.id}, got ${branch.getValue()}`);
   });
 
   return totalWeight;
@@ -159,6 +173,7 @@ let result = null;
 
 // Run each test
 tests.forEach((test) => {
+  console.log('Running test...');
   result = parseTree(test.input);
   console.assert(result === test.expected, {
     msg: 'Test failed!',
@@ -166,6 +181,7 @@ tests.forEach((test) => {
     expected: test.expected,
     actual: result,
   });
+  console.log('Test succeeded');
 });
 
 window.addEventListener('load', () => {
